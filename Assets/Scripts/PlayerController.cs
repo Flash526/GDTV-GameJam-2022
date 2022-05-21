@@ -9,6 +9,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float jumpSpeed = 5f;
     [SerializeField] float fallMultiplier = 2.5f;
     [SerializeField] float lowJumpMultiplier = 2f;
+    [SerializeField] float glideGravityScale = 2f;
+    const float startingGravityScale = 8f;
     // [SerializeField] Vector2 deathKick = new Vector2(10f, 10f);
     // float gravityScaleAtStart;
 
@@ -22,6 +24,11 @@ public class PlayerController : MonoBehaviour
     InputAction jumpAction;
     Vector2 moveInput;
 
+    [SerializeField] bool canGlide;
+    [SerializeField] bool canDoubleJump;
+    int startingJumps = 0;
+    int jumps;
+
     void Start()
     {
         rend = GetComponent<SpriteRenderer>();
@@ -33,6 +40,9 @@ public class PlayerController : MonoBehaviour
         controls = new PlayerInput();
         jumpAction = controls.Player.Jump;
         controls.Enable();
+
+        if (canGlide)
+            fallMultiplier /= 2;
     }
 
     void Update()
@@ -47,8 +57,28 @@ public class PlayerController : MonoBehaviour
 
     void JumpGravity()
     {
+        if (GetIsGrounded())
+        {
+            if (canDoubleJump)
+            {
+                jumps = startingJumps + 1;
+                return;
+            }
+
+            jumps = startingJumps;
+        }
+
         if (rb2d.velocity.y < 0)
         {
+            if (canGlide && jumpAction.IsPressed())
+            {
+                rb2d.gravityScale = glideGravityScale;
+            }
+            else
+            {
+                rb2d.gravityScale = startingGravityScale;
+            }
+
             rb2d.velocity += Vector2.up * Physics2D.gravity.y * (fallMultiplier - 1) * Time.deltaTime;
         }
         else if (rb2d.velocity.y >= 0 && !jumpAction.IsPressed())
@@ -102,12 +132,19 @@ public class PlayerController : MonoBehaviour
     {
         if (!isAlive) return;
 
-        var isGrounded = feetCollider.IsTouchingLayers(LayerMask.GetMask("Ground"));
-        if (!isGrounded) return;
+        var isGrounded = GetIsGrounded();
+        if (!isGrounded && jumps <= 0) return;
 
         if (value.isPressed)
         {
+            rb2d.velocity = new Vector2(rb2d.velocity.x, 0);
             rb2d.velocity += new Vector2(0f, jumpSpeed);
+            jumps--;
         }
+    }
+
+    private bool GetIsGrounded()
+    {
+        return feetCollider.IsTouchingLayers(LayerMask.GetMask("Ground"));
     }
 }
