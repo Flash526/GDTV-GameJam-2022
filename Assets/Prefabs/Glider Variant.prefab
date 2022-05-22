@@ -21,7 +21,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3180066380656913691, guid: 3cb1094a8a1988762a71b43c6286ed55, type: 3}
       propertyPath: m_Name
-      value: Glider
+      value: Glider Variant
+      objectReference: {fileID: 0}
+    - target: {fileID: 3180066380656913691, guid: 3cb1094a8a1988762a71b43c6286ed55, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3180066380656913693, guid: 3cb1094a8a1988762a71b43c6286ed55, type: 3}
       propertyPath: m_RootOrder

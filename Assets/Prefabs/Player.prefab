@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3180066379504916924}
   m_Layer: 0
   m_Name: Feet
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -74,7 +74,7 @@ GameObject:
   - component: {fileID: 3180066380656913694}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -164,8 +164,11 @@ MonoBehaviour:
   jumpSpeed: 30
   fallMultiplier: 1
   lowJumpMultiplier: 8
+  glideGravityScale: 2
   bodyCollider: {fileID: 3180066380819244177}
   feetCollider: {fileID: 3180066379504916924}
+  canGlide: 0
+  canDoubleJump: 0
 --- !u!114 &3180066380656913692
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -301,7 +304,7 @@ GameObject:
   - component: {fileID: 3180066380819244177}
   m_Layer: 0
   m_Name: Body
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

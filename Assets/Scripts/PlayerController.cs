@@ -52,7 +52,7 @@ public class PlayerController : MonoBehaviour
         Run();
         JumpGravity();
         FlipSprite();
-        // Die();
+        CheckDie();
     }
 
     void JumpGravity()
@@ -108,18 +108,18 @@ public class PlayerController : MonoBehaviour
 
     }
 
-    // void Die()
-    // {
-    //     if (bodyCollider.IsTouchingLayers(LayerMask.GetMask("Enemies", "Hazards")))
-    //     {
-    //         isAlive = false;
-    //         anim.SetTrigger("Dying");
-    //         rb2d.velocity = new Vector2(-Mathf.Sign(rb2d.velocity.x) * deathKick.x, deathKick.y);
-    //         rend.color = new Color32(255, 0, 0, 255);
+    void CheckDie()
+    {
+        if (bodyCollider.IsTouchingLayers(LayerMask.GetMask("Danger")))
+        {
+            isAlive = false;
+            // anim.SetTrigger("Dying");
+            // rb2d.velocity = new Vector2(-Mathf.Sign(rb2d.velocity.x) * deathKick.x, deathKick.y);
+            rend.color = new Color32(255, 0, 0, 255);
 
-    //         FindObjectOfType<GameSession>().ProcessPlayerDeath();
-    //     }
-    // }
+            FindObjectOfType<GameManager>().NextPlayer();
+        }
+    }
 
     void OnMove(InputValue value)
     {
@@ -142,6 +142,8 @@ public class PlayerController : MonoBehaviour
             jumps--;
         }
     }
+
+
 
     private bool GetIsGrounded()
     {
