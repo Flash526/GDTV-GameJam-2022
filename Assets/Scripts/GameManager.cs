@@ -7,11 +7,12 @@ public class GameManager : MonoBehaviour
 {
     [SerializeField] GameObject[] players;
     [SerializeField] Queue<GameObject> playerQueue;
-    GameObject currentPlayer;
     [SerializeField] GameObject playerSpawnPoint;
     [SerializeField] float waitTimeForNextCharacter = 1f;
+    [SerializeField] GameObject deathCanvas;
 
     PlayerInput controls;
+    GameObject currentPlayer;
 
     void Start()
     {
@@ -38,7 +39,7 @@ public class GameManager : MonoBehaviour
 
         if (playerQueue.Count == 0)
         {
-            // Game Over
+            deathCanvas.SetActive(true);
             return;
         }
 
