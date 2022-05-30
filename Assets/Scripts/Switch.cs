@@ -10,30 +10,39 @@ public class Switch : MonoBehaviour
 
     PlayerInput controls;
     bool playerPresent;
-    bool flipped;
+    bool isFlipped;
+    [SerializeField] bool isOneWay;
+
+    [SerializeField] Sprite unFlipped;
+    [SerializeField] Sprite flipped;
+    SpriteRenderer rend;
 
     void Start()
     {
         controls = new PlayerInput();
         controls.Player.Fire.performed += context => Flip();
         controls.Enable();
+
+        rend = GetComponent<SpriteRenderer>();
     }
 
     void Flip()
     {
         if (playerPresent)
         {
-            if (!flipped)
+            if (!isFlipped)
             {
-                Debug.Log("Flipped");
-                door.SetActive(false);
-                flipped = true;
+                if (door != null) door.SetActive(false);
+                rend.sprite = flipped;
+                isFlipped = true;
             }
             else
             {
-                Debug.Log("UnFlipped");
-                door.SetActive(true);
-                flipped = false;
+                if (isOneWay) return;
+
+                if (door != null) door.SetActive(true);
+                rend.sprite = unFlipped;
+                isFlipped = false;
             }
         }
     }
@@ -49,7 +58,5 @@ public class Switch : MonoBehaviour
         if (other.tag == "Player")
             playerPresent = false;
     }
-
-
 
 }

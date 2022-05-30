@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -9,9 +9,16 @@ public class GameManager : MonoBehaviour
     [SerializeField] Queue<GameObject> playerQueue;
     GameObject currentPlayer;
     [SerializeField] GameObject playerSpawnPoint;
+    [SerializeField] float waitTimeForNextCharacter = 1f;
+
+    PlayerInput controls;
 
     void Start()
     {
+        controls = new PlayerInput();
+        controls.Player.Reset.performed += context => Reset();
+        controls.Enable();
+
         playerQueue = new Queue<GameObject>();
 
         foreach (GameObject player in players)
@@ -29,8 +36,26 @@ public class GameManager : MonoBehaviour
             Destroy(currentPlayer);
         }
 
-        if (playerQueue.Count == 0) return;
+        if (playerQueue.Count == 0)
+        {
+            // Game Over
+            return;
+        }
+
+        StartCoroutine(SpawnNextPlayer());
+    }
+
+    IEnumerator SpawnNextPlayer()
+    {
+        yield return new WaitForSeconds(waitTimeForNextCharacter);
 
         currentPlayer = Instantiate(playerQueue.Dequeue(), playerSpawnPoint.transform.position, Quaternion.identity);
+
     }
+
+    void Reset()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
 }

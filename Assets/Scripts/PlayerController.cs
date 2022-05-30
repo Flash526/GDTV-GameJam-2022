@@ -143,8 +143,6 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-
-
     private bool GetIsGrounded()
     {
         return feetCollider.IsTouchingLayers(LayerMask.GetMask("Ground"));
