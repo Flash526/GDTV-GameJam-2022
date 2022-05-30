@@ -51,6 +51,11 @@ public class GameManager : MonoBehaviour
 
         currentPlayer = Instantiate(playerQueue.Dequeue(), playerSpawnPoint.transform.position, Quaternion.identity);
 
+        if (playerQueue.Count == 0)
+        {
+            FindObjectOfType<Exit>().OpenDoor();
+        }
+
     }
 
     void Reset()
